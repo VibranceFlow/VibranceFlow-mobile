@@ -70,7 +70,7 @@ Publishing software through trusted official channels requires recurring cost:
 - Apple Developer Program: **US$99/year**
 - Google Play Store registration: **US$25** one-time
 
-Support link: [Support VibranceFlow on Ko-fi](https://ko-fi.com/YOUR_USERNAME)
+Support link: [Support VibranceFlow on Ko-fi](https://ko-fi.com/fabio_monreal)
 
 If funding goals are reached, the ecosystem can move to signed binaries and official store distribution.  
 Until then, the project remains open-source, free, and transparent in both build and security model.
