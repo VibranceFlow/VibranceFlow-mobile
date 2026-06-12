@@ -33,6 +33,37 @@ After pairing, all controls are available from the phone:
 - observer toggle
 - per-app audio volume and mute (when live audio is available on PC)
 
+## Troubleshooting (Android cannot connect)
+
+The PC uses `ws://` on your LAN (not HTTPS). **Release APK builds before 2026-06 must be rebuilt** with the LAN cleartext network config (`plugins/withLanNetworkSecurity.js`).
+
+On the phone:
+
+1. Turn **mobile data OFF** (Wi‑Fi only). `192.168.x.x` is not reachable over 4G.
+2. Confirm the phone Wi‑Fi IP is in the same subnet as the PC (e.g. both `192.168.1.x`).
+3. On Windows: Pair Mobile open, **Allow in Firewall** approved, use the **current** 6-digit code.
+4. In the app: **Forget pairing**, then enter IP + code again (not an old QR).
+
+Quick test without sideloading a new APK:
+
+```powershell
+cd VibranceFlow-mobile
+npm install
+npx expo start
+```
+
+Open **Expo Go** on the phone (same Wi‑Fi), load the dev bundle, and try pairing. If Expo Go works but the GitHub APK does not, install a **new APK** from CI or build locally:
+
+```powershell
+npx expo prebuild --platform android --clean
+cd android
+.\gradlew assembleRelease
+```
+
+APK output: `android/app/build/outputs/apk/release/app-release.apk`
+
+On the PC console, when the phone connects you should see `WS handshake from ('192.168.1.xx', ...)`. If nothing appears while the phone errors, the router may block client-to-client traffic (AP isolation).
+
 ## Privacy and data policy
 
 - No cloud account required.
@@ -61,6 +92,8 @@ VirusTotal references (maintainer-updated):
 - APK scan: [Link to VirusTotal Scan - EXE/APK]
 
 For technical users: always verify release integrity with the artifact hash/checksum before installation.
+
+**Compatibility with VibranceFlow Core:** see [docs/CORE_APK_COMPATIBILITY.md](docs/CORE_APK_COMPATIBILITY.md) — core-only updates on protocol v1 do not require a new APK.
 
 ## ☕ Support the Project
 
