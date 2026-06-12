@@ -16,7 +16,28 @@ npm install
 npm run start:lan
 ```
 
-Install **Expo Go** on your device. Keep the phone and Windows PC on the same LAN. For protocol details see `docs/INTEGRATION.md` and `docs/SECURITY.md`.
+Install **Expo Go** on your device. Keep the phone and Windows PC on the same LAN (mobile data **off** on the phone). For protocol details see `docs/INTEGRATION.md` and `docs/SECURITY.md`.
+
+**Release APK vs Expo Go:** Expo Go loads JS from Metro — good for protocol testing. Sideloaded APKs need `plugins/withLanNetworkSecurity.js` (CI verifies cleartext). Old GitHub APKs without that plugin cannot use `ws://` on Android.
+
+**Core compatibility:** core-only updates that keep wire **v1** do not require a new APK. See `docs/CORE_APK_COMPATIBILITY.md`.
+
+### Verify before PR (mobile)
+
+```powershell
+npm run typecheck
+npm run verify:protocol
+npx expo prebuild --platform android --clean
+npm run verify:android-cleartext
+```
+
+Cross-repo Fernet (when touching `fernetWire.ts` or `core/remote/crypto.py`):
+
+```powershell
+npx tsx scripts/test-fernet-cmds-export.ts
+# in VibranceFlow-core:
+poetry run python scripts/test_fernet_cmds.py
+```
 
 **Security rules:** no cloud/analytics SDKs; pairing secrets only in `expo-secure-store`; validate LAN hosts with `src/lib/netPolicy.ts`; never log Fernet keys.
 
@@ -65,6 +86,7 @@ docs: describe Fernet envelope in INTEGRATION.md
 2. Describe manual test steps (device, OS version, core version).
 3. No drive-by refactors unrelated to the PR.
 4. Update `README.md` or `docs/` if behavior or protocol changes.
+5. Bump wire `"v"` in **both** core and mobile when breaking LAN compatibility; release APK and core together.
 
 ## Code style
 

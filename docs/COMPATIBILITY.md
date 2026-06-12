@@ -38,6 +38,8 @@ Not possible in a **single** repo branch at the same time. Options:
 
 Pairing and WebSocket protocol (`v: 1`) are independent of Expo SDK. Upgrading Expo does not change LAN security or core compatibility.
 
+**Core ↔ APK:** see [CORE_APK_COMPATIBILITY.md](CORE_APK_COMPATIBILITY.md) — when a GitHub APK stays valid after core updates, and when you must rebuild mobile.
+
 ## Expo Go vs production app
 
 | Mode                               | Who uses it                                                       |
