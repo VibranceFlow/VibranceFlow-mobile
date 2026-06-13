@@ -92,7 +92,7 @@ docs: describe Fernet envelope in INTEGRATION.md
 
 - TypeScript strict mode when the project is initialized.
 - English for identifiers, comments, and user-visible strings.
-- Keep secrets out of logs and git (use `.env.example` without real keys).
+- Keep secrets out of logs and git. The app does not use environment variables for pairing; store the Fernet key only in **expo-secure-store**. Local dev scripts may use `.test-key.txt` (gitignored) for cross-repo Fernet tests.
 
 ## License
 

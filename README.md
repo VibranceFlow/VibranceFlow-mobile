@@ -23,8 +23,8 @@ VibranceFlow Mobile is the Android companion app for controlling VibranceFlow Co
 1. On Windows, open VibranceFlow Core and click **Pair Mobile**.
 2. On Android, open VibranceFlow Mobile.
 3. Pair using one of these methods:
-   - scan the QR code from the PC (recommended)
-   - enter the PC IP address and 6-digit pairing code
+   - enter the PC IP address and 6-digit pairing code (primary; works without a camera)
+   - scan the QR code from the PC (equivalent; recommended when the camera is available)
 
 After pairing, all controls are available from the phone:
 
@@ -86,12 +86,12 @@ Transparency commitments:
 - encrypted local protocol with no cloud relay requirement
 - zero analytics and zero background tracking
 
-VirusTotal references (maintainer-updated):
+VirusTotal references (maintainer-updated per release):
 
-- EXE scan: [Link to VirusTotal Scan - EXE/APK]
-- APK scan: [Link to VirusTotal Scan - EXE/APK]
+- EXE scan: see the latest [VibranceFlow-core Release](https://github.com/VibranceFlow/VibranceFlow-core/releases) notes
+- APK scan: see the latest [VibranceFlow-mobile Release](https://github.com/VibranceFlow/VibranceFlow-mobile/releases) notes after upload
 
-For technical users: always verify release integrity with the artifact hash/checksum before installation.
+Before sideloading, verify the APK hash from the release artifact when a checksum is published.
 
 **Compatibility with VibranceFlow Core:** see [docs/CORE_APK_COMPATIBILITY.md](docs/CORE_APK_COMPATIBILITY.md) — core-only updates on protocol v1 do not require a new APK.
 

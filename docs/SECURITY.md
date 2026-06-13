@@ -6,7 +6,7 @@ VibranceFlow Mobile is a **local remote control** for your own PC. It does not u
 
 | Threat                                                           | Mitigation                                                                          |
 | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Another device on the same Wi‑Fi reads or forges slider commands | Every WebSocket frame is **Fernet-encrypted** with a secret from QR / paste pairing |
+| Another device on the same Wi‑Fi reads or forges slider commands | Every WebSocket frame is **Fernet-encrypted** with a secret from PIN or QR pairing |
 | Stolen phone backup exposes pairing                              | Fernet `key` stored in **expo-secure-store** only (not AsyncStorage)                |
 | Malicious QR points phone at a public IP                         | App refuses WebSocket hosts outside **private / link-local** IPv4 ranges            |
 | Accidental secret leakage via logs                               | Production code must not log `key` or decrypted payloads                            |
