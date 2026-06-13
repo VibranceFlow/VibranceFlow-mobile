@@ -11,6 +11,21 @@ VibranceFlow Mobile is the Android companion app for controlling VibranceFlow Co
 - Public build format: **APK (`vibranceflow-release.apk`)**
 - iOS support remains in development flow only (not part of public 1.0 release)
 
+## Why use the Mobile Remote?
+
+The Windows Core app does everything on its own. This mobile companion exists purely for **convenience**:
+
+- **No Alt-Tabbing:** Gamers can adjust display contrast, gamma, and background music volume (like Spotify) without leaving full-screen games.
+- **Couch Control:** Watch movies on your PC and control the screen brightness and volume directly from your phone.
+- **Accessibility Testing:** Designers can tweak saturation on the fly while looking at the full-screen canvas.
+
+### App Preview
+
+<p align="center">
+  <img src="docs/images/vibranceflow-android-pair.jpeg" width="300" alt="Pairing Screen" />
+  <img src="docs/images/vibranceflow-android-remote-control.jpeg" width="300" alt="Remote Control Screen" />
+</p>
+
 ## Install on Android
 
 1. Open the repository **Releases** page.
