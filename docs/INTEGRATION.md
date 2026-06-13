@@ -128,8 +128,8 @@ Diagnostic only; mobile may ignore unknown fields.
 
 | Command         | Payload                                                    | Notes                                                                                     |
 | --------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `ping`          | —                                                          | Health check                                                                              |
-| `get_state`     | —                                                          | Observer, active exe, current sliders/audio, `programs[]`                                 |
+| `ping`          | -                                                          | Health check                                                                              |
+| `get_state`     | -                                                          | Observer, active exe, current sliders/audio, `programs[]`                                 |
 | `set_sliders`   | vibrance, brightness, contrast, gamma, hue; optional `exe` | Applies immediately; saves profile when exe is known                                      |
 | `set_audio`     | `volume`, `muted`; optional `exe`                          | Saves desired app audio and applies immediately to all matched live sessions for that app |
 | `set_observer`  | `enabled` (bool)                                           | Toggles engine                                                                            |
@@ -179,7 +179,7 @@ Mobile validates `host` is a private LAN IPv4 address before connecting.
 From `AppSettings` / `profiles.json` `settings` section:
 
 - `observer_enabled` (bool)
-- `keep_remote_port_open` (bool) — when true, TCP 8765 stays up after closing Pair Mobile
+- `keep_remote_port_open` (bool) - when true, TCP 8765 stays up after closing Pair Mobile
 - `desktop_vibrance`, `desktop_brightness`, `desktop_contrast`, `desktop_gamma`, `desktop_hue`
 
 Mobile may expose observer toggle and "desktop colors" separately from per-game profiles.
@@ -189,7 +189,7 @@ Mobile may expose observer toggle and "desktop colors" separately from per-game 
 - Wire protocol version is **`"v": 1`** (`PROTOCOL_VERSION` in core and mobile). Product semver (1.0.0 in `app.json` / releases) is separate.
 - Bump `"v"` in QR JSON and message envelope **together** in core + mobile when breaking LAN compatibility.
 - Mobile must refuse unknown major versions with a clear upgrade message.
-- **Core-only updates** that keep v1 do **not** require a new APK — see [CORE_APK_COMPATIBILITY.md](CORE_APK_COMPATIBILITY.md).
+- **Core-only updates** that keep v1 do **not** require a new APK - see [CORE_APK_COMPATIBILITY.md](CORE_APK_COMPATIBILITY.md).
 
 ## Repository boundaries
 

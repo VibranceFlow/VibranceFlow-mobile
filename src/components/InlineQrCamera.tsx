@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * Inline QR preview — onBarcodeScanned must never be removed (Expo Go Android crash).
+ * Inline QR preview - onBarcodeScanned must never be removed (Expo Go Android crash).
  */
 export function InlineQrCamera({ onScanned, onCancel }: Props) {
   const [mounted, setMounted] = useState(false);

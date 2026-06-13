@@ -25,7 +25,7 @@ const xmlPath = path.join(
 );
 
 if (!fs.existsSync(manifestPath)) {
-  console.error("Missing AndroidManifest.xml — run expo prebuild first.");
+  console.error("Missing AndroidManifest.xml - run expo prebuild first.");
   process.exit(1);
 }
 

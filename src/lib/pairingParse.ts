@@ -23,7 +23,7 @@ export function parsePairingJson(
   } catch {
     return {
       ok: false,
-      error: "Invalid QR — scan the PC Pair Mobile code, not the Expo dev QR.",
+      error: "Invalid QR - scan the PC Pair Mobile code, not the Expo dev QR.",
     };
   }
   if (!parsed || typeof parsed !== "object") {

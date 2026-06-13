@@ -1,4 +1,4 @@
-/** Safe logging — never print pairing secrets or decrypted payloads. */
+/** Safe logging - never print pairing secrets or decrypted payloads. */
 
 export function redactHostPort(host: string, port: number): string {
   return `${host}:${port}`;

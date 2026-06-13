@@ -1,4 +1,4 @@
-# Error handling — VibranceFlow Mobile
+# Error handling - VibranceFlow Mobile
 
 How the app surfaces LAN, pairing, and storage failures. Threat model: [`SECURITY.md`](SECURITY.md). Wire contract: [`INTEGRATION.md`](INTEGRATION.md).
 
@@ -40,6 +40,6 @@ Slider/audio errors update the status bar message. `unauthorized` on any command
 
 If present in `get_state.state.remote`:
 
-- `listening`, `client_count`, `last_error`, `nvapi_available` — for troubleshooting only.
+- `listening`, `client_count`, `last_error`, `nvapi_available` - for troubleshooting only.
 
 Verify: `npm run typecheck`, `npm run verify:protocol`.

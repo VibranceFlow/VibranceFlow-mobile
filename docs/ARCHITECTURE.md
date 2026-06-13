@@ -47,25 +47,25 @@ Full mobile policy: [SECURITY.md](SECURITY.md). Error matrix: [ERROR_HANDLING.md
 
 ### Hardening checklist
 
-**Core (desktop) — v1 current**
+**Core (desktop) - v1 current**
 
 - [x] Windows Firewall rule for TCP 8765 on **private** profile (optional UAC once)
 - [x] Session rotation: **New code** invalidates old phone keys
 - [x] Rate limits and maximum message size on server
 - [x] PIN TTL, attempt limit, and lockout
 
-**Core — future optional**
+**Core - future optional**
 
 - [ ] Bind WebSocket to LAN interface only (today: `0.0.0.0` + private firewall rule)
 - [ ] Require user confirmation on PC when a new device pairs
 
-**Mobile — v1 current**
+**Mobile - v1 current**
 
 - [x] LAN host validation before connect
 - [x] Redacted logging (no secrets in production)
 - [x] Pairing secret in SecureStore only
 
-**Mobile — future optional**
+**Mobile - future optional**
 
 - [ ] TLS on LAN transport (protocol v2+)
 
@@ -101,7 +101,7 @@ Exact JSON schema: `docs/INTEGRATION.md` (field `v`).
 - Thread/async WebSocket server (e.g. `websockets` library).
 - `qrcode` for on-screen pairing.
 - `cryptography.fernet` for encrypt/decrypt.
-- Reuse `WindowsDisplayManager` / `ProfileManager` — no duplicate NVAPI logic on phone.
+- Reuse `WindowsDisplayManager` / `ProfileManager` - no duplicate NVAPI logic on phone.
 
 ## Mobile side (this repo)
 
