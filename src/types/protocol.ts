@@ -64,6 +64,7 @@ export type RemoteResponse = {
   ok: boolean;
   state?: RemoteState;
   error?: string;
+  error_code?: string;
   /** Server push, e.g. port_closed before shutdown. */
   event?: string;
 };

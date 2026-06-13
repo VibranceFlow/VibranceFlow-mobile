@@ -86,7 +86,43 @@ Server responds (plaintext before encryption):
 
 Audio is resolved from live sessions at runtime. Saved profile data stores only the desired `audio.volume` / `audio.muted` override; `available`, `session_count`, `backend`, `display_name`, and `reason` are computed on the PC each time state is requested.
 
-When the PC closes the remote port, the server sends an encrypted frame `{"event":"port_closed","error":"port_closed"}` before disconnecting. The mobile app shows a waiting state and auto-reconnects when the port is opened again (same saved pairing key).
+When the PC closes the remote port, the server sends an encrypted frame `{"event":"port_closed","error":"port_closed"}` before disconnecting. The mobile app shows a waiting state and auto-reconnects when the port is opened again (same saved pairing key). After ~12 failed reconnect attempts, the app escalates to an error state with a re-pair hint.
+
+## Error responses (v1)
+
+Encrypted command responses may include:
+
+| Field | When |
+| ----- | ---- |
+| `ok: false` | Any failure |
+| `error` | Human-readable or stable token (see below) |
+| `error_code` | Optional machine-readable code (`unknown_cmd`, `profile_save_failed`, `internal_error`, …) |
+
+Common `error` values:
+
+| `error` | Meaning | Mobile action |
+| ------- | ------- | ------------- |
+| `unauthorized` | Fernet decrypt failed / wrong key | Re-pair (do not use **New code** while paired) |
+| `port_closed` | PC stopped remote port | Waiting + auto-reconnect |
+| `timeout` | PC main thread did not respond in time | Retry or re-pair |
+| `profile save failed` | Could not write `profiles.json` | Retry; check disk permissions on PC |
+| `too_many_attempts` | PIN lockout (pairing only, plaintext) | Wait ~60s, retry PIN |
+| `invalid or expired code` | Wrong or expired PIN | Refresh code on PC |
+
+Pairing PIN responses are **plaintext** JSON (not Fernet).
+
+## `get_state` optional field: `remote`
+
+```json
+"remote": {
+  "listening": true,
+  "client_count": 1,
+  "last_error": null,
+  "nvapi_available": true
+}
+```
+
+Diagnostic only; mobile may ignore unknown fields.
 
 ## Commands (v1)
 

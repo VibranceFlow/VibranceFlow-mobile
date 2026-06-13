@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 
+import { isPrivateLanHost } from "./netPolicy";
 import type { PairingPayload } from "../types/protocol";
 import { PROTOCOL_VERSION } from "../types/protocol";
 
@@ -14,6 +15,24 @@ export type StoredPairing = {
   key: string;
   v: number;
 };
+
+export function validateStoredPairing(
+  pairing: StoredPairing,
+): string | null {
+  if (pairing.v !== PROTOCOL_VERSION) {
+    return `Saved pairing uses protocol v${pairing.v} (expected v${PROTOCOL_VERSION}). Please re-pair.`;
+  }
+  if (!isPrivateLanHost(pairing.host)) {
+    return "Saved PC address is not a private LAN IPv4 host. Please re-pair.";
+  }
+  if (!pairing.key || pairing.key.length < 16) {
+    return "Saved pairing key is invalid. Please re-pair.";
+  }
+  if (!Number.isFinite(pairing.port) || pairing.port < 1 || pairing.port > 65535) {
+    return "Saved port is invalid. Please re-pair.";
+  }
+  return null;
+}
 
 export async function loadPairing(): Promise<StoredPairing | null> {
   const host = await SecureStore.getItemAsync(KEY_HOST);
