@@ -12,7 +12,6 @@ jobs:
     timeout-minutes: 60
     env:
       CI: "1"
-      NODE_ENV: production
 
     steps:
       - name: Checkout
@@ -31,7 +30,7 @@ jobs:
           java-version: "17"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --include=dev
 
       - name: Typecheck and protocol v1 guard
         run: |
@@ -45,6 +44,8 @@ jobs:
         run: node scripts/verify-android-cleartext.js
 
       - name: Build release APKs (ABI splits + universal)
+        env:
+          NODE_ENV: production
         run: |
           cd android
           chmod +x gradlew

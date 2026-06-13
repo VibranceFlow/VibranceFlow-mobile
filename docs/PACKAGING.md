@@ -83,4 +83,6 @@ CI runs on every workflow:
 - `npm run verify:protocol`
 - `node scripts/verify-android-cleartext.js` (after prebuild)
 
+**CI note:** Do not set job-level `NODE_ENV=production` before `npm ci` - npm omits `devDependencies` (including `@types/*`) and `typecheck` fails. Install with `npm ci --include=dev`; set `NODE_ENV=production` only on the Gradle `assembleRelease` step.
+
 If `package-release-apks.sh` finds fewer than 5 APKs, the job fails and lists the Gradle output directory for debugging.
