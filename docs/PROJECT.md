@@ -11,11 +11,11 @@ Cross-platform remote control app (Android + iOS) for [VibranceFlow Core](https:
 | [VibranceFlow-PoC](https://github.com/VibranceFlow/VibranceFlow-PoC)       | Archived validation   | —       |
 | [VibranceFlow-web](https://github.com/VibranceFlow/VibranceFlow-web)       | Landing site (Vercel) | MIT     |
 
-## Communication model (planned)
+## Communication model (implemented v1)
 
-- **Transport:** WebSocket over LAN (Wi‑Fi), not Bluetooth as the primary path on Windows.
-- **Pairing:** QR code from the desktop app (`host`, `port`, session key).
-- **Security:** AES-256 (Fernet) for message payloads; reject unsigned or wrong-key frames (local zero-trust).
+- **Transport:** WebSocket over LAN (Wi‑Fi) on port `8765`; Bluetooth is not used in v1.
+- **Pairing:** Primary method is **IP + 6-digit PIN** from the desktop Pair Mobile dialog. **QR** (or pasted JSON) is an equivalent alternative that delivers `host`, `port`, and session key directly.
+- **Security:** AES-256 (Fernet) for all post-pairing command payloads; wrong-key frames are rejected (local zero-trust). Pairing uses a short cleartext window over `ws://` — see [SECURITY.md](SECURITY.md).
 - **Latency:** Persistent socket so slider changes apply in near real time.
 
 Details: [ARCHITECTURE.md](ARCHITECTURE.md), [INTEGRATION.md](INTEGRATION.md).

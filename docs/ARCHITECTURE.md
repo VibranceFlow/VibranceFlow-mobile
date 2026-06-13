@@ -19,7 +19,7 @@ Bluetooth may be explored later for discovery only; **v1 uses LAN**.
 Public CA TLS on raw LAN IPs is awkward (certificate warnings). v1 uses **payload encryption** instead:
 
 1. Core generates a strong random key (Fernet / AES-256) per session or per pairing.
-2. Desktop UI shows a **QR code** with non-secret routing + secret:
+2. **Pairing v1:** Primary path is **IP + 6-digit PIN** (plaintext PIN exchange, then PC returns `host`, `port`, `key`). **QR** (or pasted JSON) is equivalent:
 
    ```json
    {
@@ -30,9 +30,9 @@ Public CA TLS on raw LAN IPs is awkward (certificate warnings). v1 uses **payloa
    }
    ```
 
-3. Phone scans QR, stores `key` in secure storage, opens `ws://host:port`.
-4. Every command is a JSON object, serialized, **encrypted**, sent as a text or binary frame.
-5. Core rejects frames that fail decrypt or authentication (wrong key, replay without session id if added later).
+3. Phone stores `key` in secure storage, opens `ws://host:port`.
+4. Every command is a JSON object, serialized, **encrypted**, sent as a WebSocket text frame.
+5. Core rejects frames that fail decrypt or authentication (wrong key; replay without session id if added later).
 
 Threat model: neighbors on the same Wi‑Fi cannot forge or read commands without the pairing secret. This is **not** a substitute for internet-facing TLS if a future cloud relay is added.
 
@@ -47,39 +47,49 @@ Full mobile policy: [SECURITY.md](SECURITY.md).
 
 ### Hardening checklist
 
-**Core (desktop)**
+**Core (desktop) — v1 current**
 
-- [ ] Bind WebSocket to LAN interface only (not `0.0.0.0` on public networks without firewall rules).
-- [ ] Optional: require user confirmation on PC when a new device pairs.
-- [x] Session rotation: new QR invalidates old phone keys (regenerate in Pair Mobile).
-- [x] Rate limits and maximum message size on server.
+- [x] Windows Firewall rule for TCP 8765 on **private** profile (optional UAC once)
+- [x] Session rotation: **New code** invalidates old phone keys
+- [x] Rate limits and maximum message size on server
+- [x] PIN TTL, attempt limit, and lockout
 
-**Mobile**
+**Core — future optional**
+
+- [ ] Bind WebSocket to LAN interface only (today: `0.0.0.0` + private firewall rule)
+- [ ] Require user confirmation on PC when a new device pairs
+
+**Mobile — v1 current**
 
 - [x] LAN host validation before connect
-- [x] Redacted logging (no secrets)
-- [ ] Optional: certificate / TLS if LAN transport hardening is added later
+- [x] Redacted logging (no secrets in production)
+- [x] Pairing secret in SecureStore only
+
+**Mobile — future optional**
+
+- [ ] TLS on LAN transport (protocol v2+)
 
 ## Message flow
 
 ```
-┌─────────────┐   QR (once)    ┌─────────────┐
-│ VibranceFlow  │ ◄───────────── │ Mobile app  │
-│ Core (PC)   │                │ Android/iOS │
-└──────┬──────┘                └──────┬──────┘
-       │  ws://host:port              │
-       │  encrypted {"cmd":...}       │
-       ◄──────────────────────────────┤
-       │  encrypted {"ok":true,...}   │
-       └──────────────────────────────►
+┌─────────────┐  PIN or QR (once)  ┌─────────────┐
+│ VibranceFlow│ ◄───────────────── │ Mobile app  │
+│ Core (PC)   │                    │ Android/iOS │
+└──────┬──────┘                    └──────┬──────┘
+       │  ws://host:port                  │
+       │  encrypted {"cmd":...}           │
+       ◄──────────────────────────────────┤
+       │  encrypted {"ok":true,...}       │
+       └──────────────────────────────────►
 ```
 
 ## Commands (v1, implemented)
 
 | Command         | Purpose                                            |
 | --------------- | -------------------------------------------------- |
-| `get_state`     | Observer, active exe, sliders, saved `programs[]`  |
+| `get_state`     | Observer, active exe, sliders, audio, saved `programs[]` |
 | `set_sliders`   | Update sliders; optional `exe` for a saved profile |
+| `set_audio`     | Per-app volume/mute; optional `exe`                |
 | `set_observer`  | Enable/disable foreground observer                 |
 | `reset_profile` | Reset active (or given) exe to GPU defaults        |
 | `ping`          | Health check                                       |
