@@ -16,7 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SliderRow } from "../components/SliderRow";
 import { VerticalAudioSlider } from "../components/VerticalAudioSlider";
-import { LuminaWsClient, type DisconnectReason } from "../lib/wsClient";
+import { VibranceFlowWsClient, type DisconnectReason } from "../lib/wsClient";
 import { clearPairing, type StoredPairing } from "../lib/storage";
 import { redactHostPort } from "../lib/redact";
 import type { AudioState, ProgramEntry, SliderState } from "../types/protocol";
@@ -83,7 +83,7 @@ export function ControlScreen({
 	onForget: onForgetCallback,
 	onRepair,
 }: Props) {
-	const clientRef = useRef(new LuminaWsClient());
+	const clientRef = useRef(new VibranceFlowWsClient());
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const audioDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const connectGenRef = useRef(0);

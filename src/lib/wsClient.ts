@@ -26,7 +26,7 @@ function isPortClosedFrame(resp: RemoteResponse): boolean {
   return resp.event === "port_closed" || resp.error === "port_closed";
 }
 
-export class LuminaWsClient {
+export class VibranceFlowWsClient {
   private ws: WebSocket | null = null;
   private key = "";
   private pending = new Map<
