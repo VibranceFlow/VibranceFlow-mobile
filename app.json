@@ -2,7 +2,7 @@
   "expo": {
     "name": "VibranceFlow",
     "slug": "VibranceFlow-mobile",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "icon": "./src/screens/ios_logo.png",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",

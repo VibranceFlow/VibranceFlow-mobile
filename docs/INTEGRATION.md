@@ -186,7 +186,7 @@ Mobile may expose observer toggle and "desktop colors" separately from per-game 
 
 ## Versioning
 
-- Wire protocol version is **`"v": 1`** (`PROTOCOL_VERSION` in core and mobile). Product semver (1.0.0 in `app.json` / releases) is separate.
+- Wire protocol version is **`"v": 1`** (`PROTOCOL_VERSION` in core and mobile). Product semver (1.1.0 in `app.json` / releases) is separate.
 - Bump `"v"` in QR JSON and message envelope **together** in core + mobile when breaking LAN compatibility.
 - Mobile must refuse unknown major versions with a clear upgrade message.
 - **Core-only updates** that keep v1 do **not** require a new APK - see [CORE_APK_COMPATIBILITY.md](CORE_APK_COMPATIBILITY.md).
