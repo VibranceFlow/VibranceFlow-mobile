@@ -22,6 +22,8 @@ Install **Expo Go** on your device. Keep the phone and Windows PC on the same LA
 
 **Core compatibility:** core-only updates that keep wire **v1** do not require a new APK. See `docs/CORE_APK_COMPATIBILITY.md`.
 
+**Release builds:** CI produces **5 APKs** (universal + ABI splits). See `docs/PACKAGING.md` and `scripts/package-release-apks.sh`. Do not commit `android/` or `dist/`.
+
 ### Verify before PR (mobile)
 
 ```powershell

@@ -44,16 +44,20 @@ jobs:
       - name: Verify ws:// cleartext in Android manifest
         run: node scripts/verify-android-cleartext.js
 
-      - name: Build release APK
+      - name: Build release APKs (ABI splits + universal)
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleRelease
-          cp app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/vibranceflow-release.apk
 
-      - name: Upload Android artifact
+      - name: Package branded APKs and SHA-256 sidecars
+        run: bash scripts/package-release-apks.sh
+
+      - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: VibranceFlow-mobile-android-apk
-          path: android/app/build/outputs/apk/release/vibranceflow-release.apk
+          name: VibranceFlow-mobile-android-apks
+          path: |
+            dist/android-apk/*.apk
+            dist/android-apk/*.sha256
           if-no-files-found: error
