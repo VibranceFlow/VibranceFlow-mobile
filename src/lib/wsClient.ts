@@ -10,6 +10,11 @@ import { PROTOCOL_VERSION } from "../types/protocol";
 
 export type DisconnectReason = "port_closed" | "lost";
 
+export const KEY_MISMATCH_MESSAGE =
+  "Encryption key mismatch. On the PC do not click New code while paired. Re-pair with a fresh QR or 6-digit code.";
+
+const DECRYPT_FAIL_THRESHOLD = 2;
+
 function randomId(): string {
   const bytes = new Uint8Array(4);
   crypto.getRandomValues(bytes);
@@ -29,6 +34,7 @@ function isPortClosedFrame(resp: RemoteResponse): boolean {
 export class VibranceFlowWsClient {
   private ws: WebSocket | null = null;
   private key = "";
+  private decryptFailCount = 0;
   private pending = new Map<
     string,
     { resolve: (r: RemoteResponse) => void; reject: (e: Error) => void }
@@ -46,6 +52,7 @@ export class VibranceFlowWsClient {
       return Promise.reject(new Error("Host is not a private LAN address."));
     }
     this.key = key.trim();
+    this.decryptFailCount = 0;
     this.disconnectReason = null;
     this.disconnect();
 
@@ -106,6 +113,15 @@ export class VibranceFlowWsClient {
           const wire = typeof ev.data === "string" ? ev.data : String(ev.data);
           const plain = decryptJson(this.key, wire);
           const resp = JSON.parse(plain) as RemoteResponse;
+          this.decryptFailCount = 0;
+          if (resp.v !== undefined && resp.v !== PROTOCOL_VERSION) {
+            this.handleSessionAuthFailure(
+              new Error(
+                `Unsupported protocol version (expected ${PROTOCOL_VERSION}). Re-pair after updating the app.`,
+              ),
+            );
+            return;
+          }
           if (isPortClosedFrame(resp)) {
             this.disconnectReason = "port_closed";
             return;
@@ -114,17 +130,23 @@ export class VibranceFlowWsClient {
           if (id && this.pending.has(id)) {
             const p = this.pending.get(id)!;
             this.pending.delete(id);
+            if (resp.ok === false && resp.error === "unauthorized") {
+              p.reject(new Error(KEY_MISMATCH_MESSAGE));
+              this.handleSessionAuthFailure(new Error(KEY_MISMATCH_MESSAGE));
+              return;
+            }
             p.resolve(resp);
             return;
           }
           if (resp.ok === false && resp.error === "unauthorized") {
-            const err = new Error(
-              "Encryption key mismatch. On the PC do not click New code while paired. Re-pair with a fresh QR or 6-digit code.",
-            );
-            this.rejectOnePending(err);
+            this.handleSessionAuthFailure(new Error(KEY_MISMATCH_MESSAGE));
           }
         } catch {
-          devLog("ignored frame");
+          this.decryptFailCount += 1;
+          devLog("ignored frame", { decryptFailCount: this.decryptFailCount });
+          if (this.decryptFailCount >= DECRYPT_FAIL_THRESHOLD) {
+            this.handleSessionAuthFailure(new Error(KEY_MISMATCH_MESSAGE));
+          }
         }
       };
     });
@@ -136,7 +158,24 @@ export class VibranceFlowWsClient {
       this.ws.close();
       this.ws = null;
     }
+    this.decryptFailCount = 0;
     this.rejectAllPending(new Error("Disconnected."));
+  }
+
+  private handleSessionAuthFailure(err: Error): void {
+    this.rejectAllPending(err);
+    this.disconnectReason = "lost";
+    if (this.ws) {
+      const socket = this.ws;
+      this.ws.onclose = null;
+      this.ws = null;
+      try {
+        socket.close();
+      } catch {
+        /* ignore */
+      }
+    }
+    this.onDisconnect?.("lost");
   }
 
   private rejectAllPending(err: Error): void {
@@ -144,14 +183,6 @@ export class VibranceFlowWsClient {
       p.reject(err);
     }
     this.pending.clear();
-  }
-
-  private rejectOnePending(err: Error): void {
-    const first = this.pending.entries().next();
-    if (!first.done) {
-      first.value[1].reject(err);
-      this.pending.delete(first.value[0]);
-    }
   }
 
   sendCommand(
@@ -167,19 +198,32 @@ export class VibranceFlowWsClient {
       req.payload = payload;
     }
 
-    const wire = encryptJson(this.key, serializeRequest(req));
+    let wire: string;
+    try {
+      wire = encryptJson(this.key, serializeRequest(req));
+    } catch {
+      return Promise.reject(new Error(KEY_MISMATCH_MESSAGE));
+    }
+
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
       const t = setTimeout(() => {
         if (this.pending.has(id)) {
           this.pending.delete(id);
-          reject(new Error("Command timed out."));
+          const hint =
+            cmd === "ping" ? KEY_MISMATCH_MESSAGE : "Command timed out.";
+          reject(new Error(hint));
         }
       }, 12_000);
       const entry = this.pending.get(id)!;
       this.pending.set(id, {
         resolve: (r) => {
           clearTimeout(t);
+          if (r.ok === false && r.error === "unauthorized") {
+            entry.reject(new Error(KEY_MISMATCH_MESSAGE));
+            this.handleSessionAuthFailure(new Error(KEY_MISMATCH_MESSAGE));
+            return;
+          }
           entry.resolve(r);
         },
         reject: (e) => {

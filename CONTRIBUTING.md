@@ -16,7 +16,7 @@ npm install
 npm run start:lan
 ```
 
-Install **Expo Go** on your device. Keep the phone and Windows PC on the same LAN (mobile data **off** on the phone). For protocol details see `docs/INTEGRATION.md` and `docs/SECURITY.md`.
+Install **Expo Go** on your device. Keep the phone and Windows PC on the same LAN (mobile data **off** on the phone). For protocol details see `docs/INTEGRATION.md`, `docs/SECURITY.md`, and `docs/ERROR_HANDLING.md`.
 
 **Release APK vs Expo Go:** Expo Go loads JS from Metro — good for protocol testing. Sideloaded APKs need `plugins/withLanNetworkSecurity.js` (CI verifies cleartext). Old GitHub APKs without that plugin cannot use `ws://` on Android.
 

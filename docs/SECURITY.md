@@ -56,3 +56,5 @@ No microphone, Bluetooth, or location.
 ## Reporting issues
 
 Open a GitHub issue on [VibranceFlow-mobile](https://github.com/VibranceFlow/VibranceFlow-mobile) with steps to reproduce. Do not paste real pairing `key` values in public issues.
+
+Error handling reference: [docs/ERROR_HANDLING.md](docs/ERROR_HANDLING.md).

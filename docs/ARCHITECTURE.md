@@ -36,7 +36,7 @@ Public CA TLS on raw LAN IPs is awkward (certificate warnings). v1 uses **payloa
 
 Threat model: neighbors on the same Wi‑Fi cannot forge or read commands without the pairing secret. This is **not** a substitute for internet-facing TLS if a future cloud relay is added.
 
-Full mobile policy: [SECURITY.md](SECURITY.md).
+Full mobile policy: [SECURITY.md](SECURITY.md). Error matrix: [ERROR_HANDLING.md](ERROR_HANDLING.md).
 
 ### Mobile app (implemented constraints)
 

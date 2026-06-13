@@ -25,6 +25,7 @@ import { colors } from "../theme";
 const DEBOUNCE_MS = 180;
 const STATE_POLL_MS = 1500;
 const RECONNECT_MS = 2500;
+const MAX_RECONNECT_ATTEMPTS = 12;
 const BRAND_LOGO =
 	Platform.OS === "android"
 		? require("./android_logo.png")
@@ -87,6 +88,7 @@ export function ControlScreen({
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const audioDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const connectGenRef = useRef(0);
+	const reconnectAttemptsRef = useRef(0);
 	const editingExeRef = useRef<string | null>(null);
 	const activeExeRef = useRef("—");
 	const audioAdjustingRef = useRef(false);
@@ -158,6 +160,7 @@ export function ControlScreen({
 			if (!ping.ok) throw new Error(ping.error ?? "ping failed");
 			await refreshState();
 			if (gen !== connectGenRef.current) return;
+			reconnectAttemptsRef.current = 0;
 			setStatus("connected");
 			setStatusMsg(`Connected · ${redactHostPort(pairing.host, pairing.port)}`);
 		},
@@ -166,6 +169,7 @@ export function ControlScreen({
 
 	const onDisconnect = useCallback((reason: DisconnectReason) => {
 		if (reason === "port_closed") {
+			reconnectAttemptsRef.current = 0;
 			setStatus("waiting");
 			setStatusMsg("PC closed remote port (8765). Waiting for it to reopen…");
 			return;
@@ -202,8 +206,16 @@ export function ControlScreen({
 		if (status !== "waiting") return;
 		const id = setInterval(() => {
 			const gen = connectGenRef.current;
-			connectToPc(gen).catch(() => {
-				/* keep waiting */
+			connectToPc(gen).catch((e) => {
+				reconnectAttemptsRef.current += 1;
+				if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+					setStatus("error");
+					setStatusMsg(
+						e instanceof Error
+							? e.message
+							: "PC not reachable. Check IP, firewall, or re-pair.",
+					);
+				}
 			});
 		}, RECONNECT_MS);
 		return () => clearInterval(id);
@@ -373,7 +385,15 @@ export function ControlScreen({
 	};
 	const handleForget = async () => {
 		clientRef.current.disconnect();
-		await clearPairing();
+		try {
+			await clearPairing();
+		} catch {
+			Alert.alert(
+				"Could not clear pairing",
+				"Secure storage could not be wiped. Try again or reinstall the app.",
+			);
+			return;
+		}
 		onForgetCallback();
 	};
 	const confirmRepair = () => {

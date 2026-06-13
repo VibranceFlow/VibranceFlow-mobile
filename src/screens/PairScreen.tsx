@@ -33,18 +33,23 @@ const BRAND_LOGO =
 
 type Props = {
 	onPaired: (payload: PairingPayload) => void;
+	initialError?: string | null;
 };
 function delay(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export function PairScreen({ onPaired }: Props) {
+export function PairScreen({ onPaired, initialError = null }: Props) {
 	const [host, setHost] = useState("");
 
 	const [pin, setPin] = useState("");
 
 	const [showInlineCamera, setShowInlineCamera] = useState(false);
 
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<string | null>(initialError);
+
+	useEffect(() => {
+		if (initialError) setError(initialError);
+	}, [initialError]);
 
 	const [busy, setBusy] = useState(false);
 

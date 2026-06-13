@@ -88,7 +88,11 @@ export function pairWithPin(
         return;
       }
       if (body.v !== PROTOCOL_VERSION) {
-        fail("Unsupported protocol version.");
+        fail(`Unsupported protocol version (expected ${PROTOCOL_VERSION}).`);
+        return;
+      }
+      if (body.error === "too_many_attempts") {
+        fail("Too many wrong codes. Wait about 60 seconds, then try again.");
         return;
       }
       if (!body.ok || typeof body.key !== "string" || body.key.length < 16) {
