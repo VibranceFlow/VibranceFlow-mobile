@@ -49,7 +49,7 @@ Ship a new **VibranceFlow-mobile** release when:
 
 | Mobile APK | Core `.exe` | Notes |
 | ---------- | ----------- | ----- |
-| **1.0.x** (with LAN cleartext plugin) | **1.0.x** | Full remote control on protocol v1 |
+| **1.0.x - 1.1.x** (with LAN cleartext plugin) | **1.0.x - 1.1.x** | Full remote control on protocol v1 |
 | Pre-2026-06 GitHub APK | Any core | Missing cleartext config - use new APK or Expo Go |
 
 Version numbers in `app.json` / core packaging are **product** versions, not the wire `"v": 1`. Wire version is the compatibility key.

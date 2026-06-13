@@ -5,11 +5,11 @@
 
 VibranceFlow Mobile is the Android companion app for controlling VibranceFlow Core on your Windows PC over local Wi-Fi.
 
-## Release 1.0 scope
+## Release 1.1 scope
 
 - Supported mobile release platform: **Android**
 - Public build format: **5 release APKs** (1 universal + 4 ABI splits) - see [docs/PACKAGING.md](docs/PACKAGING.md)
-- iOS support remains in development flow only (not part of public 1.0 release)
+- iOS support remains in development flow only (not part of public 1.1 release)
 
 ## Why use the Mobile Remote?
 
@@ -28,7 +28,7 @@ The Windows Core app does everything on its own. This mobile companion exists pu
 
 ## Install on Android
 
-1. Open the repository [**Releases**](https://github.com/VibranceFlow/VibranceFlow-mobile/releases) page.
+1. Open the repository [**Releases**](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/tag/V1.1.0) page (latest: **v1.1.0**).
 2. Download **`vibranceflow-universal-release.apk`** (recommended for all devices).
 3. Optional: use a split APK for your CPU (`arm64-v8a` for most phones, `armeabi-v7a` for older devices, `x86_64` / `x86` for emulators) - see [docs/PACKAGING.md](docs/PACKAGING.md).
 4. Verify SHA-256 using the matching `.apk.sha256` sidecar on the same release.
@@ -105,10 +105,27 @@ Transparency commitments:
 - encrypted local protocol with no cloud relay requirement
 - zero analytics and zero background tracking
 
-VirusTotal references (maintainer-updated per release):
+VirusTotal references (v1.1.0 checksum sidecars on GitHub Releases):
 
-- EXE scan: see the latest [VibranceFlow-core Release](https://github.com/VibranceFlow/VibranceFlow-core/releases) notes
-- APK scan: see the latest [VibranceFlow-mobile Release](https://github.com/VibranceFlow/VibranceFlow-mobile/releases) notes after upload
+| Build | SHA-256 (APK) | VirusTotal |
+| --- | --- | --- |
+| Universal | `cda8319e1c81b28961f1e4ad8bd95b3a789fd3f26bf3d71405eff49436c85775` | [Scan](https://www.virustotal.com/gui/file/e99341210c716f05d2bfd4de2fd2127076ea5b5110d35d79edd3bc4188e30cf6?nocache=1) |
+| ARM64 (`arm64-v8a`) | `603b1bba96e89d44e19bd61ecc6732103cb220039360d2d24f7528dcd06cab08` | [Scan](https://www.virustotal.com/gui/file/6291a928100756c5ebbe027656cd2951149da643cb6dbc75ffedadb5eabec1c4?nocache=1) |
+| ARM 32-bit (`armeabi-v7a`) | `02b1d33796fc088bbb4c7a59b2574fe000e42a96a5bfad55a8efae8b06cff85a` | [Scan](https://www.virustotal.com/gui/file/38427252a6ddeebfacd2c8ecf02365fa7a1c94c7e9696b7cc743fceee86415b6?nocache=1) |
+| x86_64 | `98a34a208e271a7e82bb11f37ad177f2ce41af1833294dd2dc0835ead888cc56` | [Scan](https://www.virustotal.com/gui/file/c447c4c4a3c6a9c083e10bee33d72e5947c7d3860489c8480135ad1de19fe250?nocache=1) |
+| x86 | `1abbe4c70644bf46514fddff348f1fc3946ac50b56deeb64715d119d51ba31b7` | [Scan](https://www.virustotal.com/gui/file/fcafc2b370d83df7e33b62ed74fe146cec2a501113640610b007f66295cc05f1?nocache=1) |
+
+Windows `.exe` scan: [VibranceFlow-core v1.1.0 Release](https://github.com/VibranceFlow/VibranceFlow-core/releases/tag/V1.1.0) · [VirusTotal](https://www.virustotal.com/gui/file/de47071336775b4b8486b02e35be3b6583701d3a31a2f04d29cdc9fe2e95a960?nocache=1)
+
+Direct downloads (v1.1.0):
+
+| Build | APK | SHA-256 sidecar |
+| --- | --- | --- |
+| Universal | [Download](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-universal-release.apk) | [`.sha256`](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-universal-release.apk.sha256) |
+| ARM64 | [Download](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-arm64-v8a-release.apk) | [`.sha256`](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-arm64-v8a-release.apk.sha256) |
+| ARM 32-bit | [Download](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-armeabi-v7a-release.apk) | [`.sha256`](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-armeabi-v7a-release.apk.sha256) |
+| x86_64 | [Download](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-x86_64-release.apk) | [`.sha256`](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-x86_64-release.apk.sha256) |
+| x86 | [Download](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-x86-release.apk) | [`.sha256`](https://github.com/VibranceFlow/VibranceFlow-mobile/releases/download/V1.1.0/vibranceflow-x86-release.apk.sha256) |
 
 Before sideloading, verify the APK hash from the release artifact when a checksum is published.
 
