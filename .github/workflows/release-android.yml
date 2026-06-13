@@ -1,0 +1,93 @@
+name: Release Android APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (for example v1.1.0)"
+        required: true
+        type: string
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      CI: "1"
+      NODE_ENV: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Normalize release version
+        run: |
+          TAG="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref_name }}"
+          if [[ "$TAG" =~ ^v(.+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          else
+            VERSION="$TAG"
+          fi
+          echo "VIBRANCEFLOW_VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Set up Java 17 (Zulu)
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "17"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck and protocol v1 guard
+        run: |
+          npm run typecheck
+          npm run verify:protocol
+
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --clean
+
+      - name: Verify ws:// cleartext in Android manifest
+        run: node scripts/verify-android-cleartext.js
+
+      - name: Build release APKs (ABI splits + universal)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Package branded APKs and SHA-256 sidecars
+        run: bash scripts/package-release-apks.sh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref_name }}
+          name: VibranceFlow ${{ env.VIBRANCEFLOW_VERSION }} (Android)
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          body_path: dist/android-apk/release-body.md
+          files: |
+            dist/android-apk/vibranceflow-universal-release.apk
+            dist/android-apk/vibranceflow-universal-release.apk.sha256
+            dist/android-apk/vibranceflow-arm64-v8a-release.apk
+            dist/android-apk/vibranceflow-arm64-v8a-release.apk.sha256
+            dist/android-apk/vibranceflow-armeabi-v7a-release.apk
+            dist/android-apk/vibranceflow-armeabi-v7a-release.apk.sha256
+            dist/android-apk/vibranceflow-x86_64-release.apk
+            dist/android-apk/vibranceflow-x86_64-release.apk.sha256
+            dist/android-apk/vibranceflow-x86-release.apk
+            dist/android-apk/vibranceflow-x86-release.apk.sha256

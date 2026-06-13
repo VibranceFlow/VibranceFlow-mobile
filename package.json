@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "verify:protocol": "npx tsx scripts/verify-protocol-v1.ts",
     "verify:android-cleartext": "node scripts/verify-android-cleartext.js",
+    "package:android-apks": "bash scripts/package-release-apks.sh",
     "fix-deps": "npx expo install --fix",
     "audit:check": "npm audit --audit-level=high"
   },

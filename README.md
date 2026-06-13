@@ -8,7 +8,7 @@ VibranceFlow Mobile is the Android companion app for controlling VibranceFlow Co
 ## Release 1.0 scope
 
 - Supported mobile release platform: **Android**
-- Public build format: **APK (`vibranceflow-release.apk`)**
+- Public build format: **5 release APKs** (1 universal + 4 ABI splits) - see [docs/PACKAGING.md](docs/PACKAGING.md)
 - iOS support remains in development flow only (not part of public 1.0 release)
 
 ## Why use the Mobile Remote?
@@ -28,10 +28,12 @@ The Windows Core app does everything on its own. This mobile companion exists pu
 
 ## Install on Android
 
-1. Open the repository **Releases** page.
-2. Download the latest APK artifact.
-3. Install it on your Android device (allow unknown sources when Android requests it).
-4. Open the app and keep your phone on the same Wi-Fi as the Windows PC.
+1. Open the repository [**Releases**](https://github.com/VibranceFlow/VibranceFlow-mobile/releases) page.
+2. Download **`vibranceflow-universal-release.apk`** (recommended for all devices).
+3. Optional: use a split APK for your CPU (`arm64-v8a` for most phones, `armeabi-v7a` for older devices, `x86_64` / `x86` for emulators) - see [docs/PACKAGING.md](docs/PACKAGING.md).
+4. Verify SHA-256 using the matching `.apk.sha256` sidecar on the same release.
+5. Install on your Android device (allow unknown sources when Android requests it).
+6. Open the app and keep your phone on the same Wi-Fi as the Windows PC.
 
 ## Pairing with your PC
 
@@ -73,9 +75,11 @@ Open **Expo Go** on the phone (same Wi‑Fi), load the dev bundle, and try pairi
 npx expo prebuild --platform android --clean
 cd android
 .\gradlew assembleRelease
+cd ..
+bash scripts/package-release-apks.sh
 ```
 
-APK output: `android/app/build/outputs/apk/release/app-release.apk`
+Packaged output: `dist/android-apk/` (5 branded APKs). See [docs/PACKAGING.md](docs/PACKAGING.md).
 
 On the PC console, when the phone connects you should see `WS handshake from ('192.168.1.xx', ...)`. If nothing appears while the phone errors, the router may block client-to-client traffic (AP isolation).
 
@@ -131,7 +135,10 @@ Until then, the project remains open-source, free, and transparent in both build
 
 ## For developers
 
-Development setup, Expo workflow, and contribution rules are documented in [CONTRIBUTING.md](CONTRIBUTING.md).
+Development setup, Expo workflow, Android packaging (5 APKs), and contribution rules:
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [docs/PACKAGING.md](docs/PACKAGING.md)
 
 ## License
 
