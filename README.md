@@ -108,7 +108,7 @@ VirusTotal references (maintainer-updated per release):
 
 Before sideloading, verify the APK hash from the release artifact when a checksum is published.
 
-**Compatibility with VibranceFlow Core:** see [docs/CORE_APK_COMPATIBILITY.md](docs/CORE_APK_COMPATIBILITY.md) — core-only updates on protocol v1 do not require a new APK.
+**Compatibility with VibranceFlow Core:** see [docs/CORE_APK_COMPATIBILITY.md](docs/CORE_APK_COMPATIBILITY.md) - core-only updates on protocol v1 do not require a new APK.
 
 ## ☕ Support the Project
 
@@ -135,4 +135,4 @@ Development setup, Expo workflow, and contribution rules are documented in [CONT
 
 ## License
 
-GPL-3.0 — see [LICENSE](LICENSE).
+GPL-3.0 - see [LICENSE](LICENSE).

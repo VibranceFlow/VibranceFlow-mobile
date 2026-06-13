@@ -2,7 +2,7 @@
 
 This document defines when a **GitHub release APK** keeps working after **VibranceFlow-core** updates, and when you must ship a new mobile build.
 
-Expo Go success against `poetry run python gui_main.py` proves the **JavaScript protocol stack** matches core. The old GitHub APK failed because the **native Android shell** blocked `ws://` cleartext — fixed by `plugins/withLanNetworkSecurity.js` + CI check `scripts/verify-android-cleartext.js`.
+Expo Go success against `poetry run python gui_main.py` proves the **JavaScript protocol stack** matches core. The old GitHub APK failed because the **native Android shell** blocked `ws://` cleartext - fixed by `plugins/withLanNetworkSecurity.js` + CI check `scripts/verify-android-cleartext.js`.
 
 ## Locked contract (v1)
 
@@ -43,14 +43,14 @@ Ship a new **VibranceFlow-mobile** release when:
 
 ## New core build recommended (not always mandatory)
 
-- New **optional** mobile UI features that depend on new commands — old APK still runs, but cannot use new features until updated.
+- New **optional** mobile UI features that depend on new commands - old APK still runs, but cannot use new features until updated.
 
 ## Release pairing (recommended)
 
 | Mobile APK | Core `.exe` | Notes |
 | ---------- | ----------- | ----- |
 | **1.0.x** (with LAN cleartext plugin) | **1.0.x** | Full remote control on protocol v1 |
-| Pre-2026-06 GitHub APK | Any core | Missing cleartext config — use new APK or Expo Go |
+| Pre-2026-06 GitHub APK | Any core | Missing cleartext config - use new APK or Expo Go |
 
 Version numbers in `app.json` / core packaging are **product** versions, not the wire `"v": 1`. Wire version is the compatibility key.
 
@@ -62,7 +62,7 @@ On every push to `main` (non-md):
 
 1. `npm ci`
 2. `expo prebuild --platform android --clean`
-3. `node scripts/verify-android-cleartext.js` — fails if release APK would block `ws://`
+3. `node scripts/verify-android-cleartext.js` - fails if release APK would block `ws://`
 4. `./gradlew assembleRelease`
 
 **Suggested before merge:** `npm run typecheck`

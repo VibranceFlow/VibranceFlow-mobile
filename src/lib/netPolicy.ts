@@ -47,7 +47,7 @@ export function validatePairingHost(host: string): string | null {
     return "Use the PC IPv4 address from Pair Mobile (e.g. 192.168.x.x), not IPv6.";
   }
   if (h === "127.0.0.1" || h === "localhost") {
-    return "PC QR shows localhost — fix LAN IP on Windows (reopen Pair Mobile).";
+    return "PC QR shows localhost - fix LAN IP on Windows (reopen Pair Mobile).";
   }
   if (!isPrivateLanHost(h)) {
     return "Only private LAN IPv4 addresses are allowed (e.g. 192.168.x.x).";

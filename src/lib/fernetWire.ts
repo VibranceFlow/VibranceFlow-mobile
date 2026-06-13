@@ -1,5 +1,5 @@
 /**
- * Fernet wire format — matches VibranceFlow-core/core/remote/crypto.py
+ * Fernet wire format - matches VibranceFlow-core/core/remote/crypto.py
  * AES-128-CBC via aes-js (CryptoJS AES breaks multi-block payloads).
  */
 import aes from "aes-js";
